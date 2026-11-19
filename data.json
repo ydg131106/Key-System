@@ -6,7 +6,8 @@
   },
   "Key": {
     "hwid": null,
-    "status": "금지",
-    "createdAt": "2026-11-19T17:22:24.133Z"
+    "status": "기간 정지",
+    "createdAt": "2026-11-19T17:22:24.133Z",
+    "suspendUntil": 1795109909324
   }
 }
