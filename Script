@@ -1,0 +1,38 @@
+local HttpService = game:GetService("HttpService")
+local RbxAnalyticsService = game:GetService("RbxAnalyticsService")
+
+local apiUrl = "https://xn-----w41jw5mcqal8dh3olxb.com"
+
+-- 환경에 맞춰 자동으로 HWID(클라이언트 고유 ID) 수집
+local function getAutoHWID()
+    if gethwid then
+        return gethwid() -- 실행기 내장 HWID 함수가 있는 경우
+    else
+        -- 없는 경우 Roblox 클라이언트 기기 고유 ID 반환
+        return RbxAnalyticsService:GetClientId() 
+    end
+end
+
+local data = {
+    key = "Test",
+    hwid = getAutoHWID() -- 자동으로 수집된 값 입력
+}
+
+local jsonData = HttpService:JSONEncode(data)
+
+-- 환경에 따른 HTTP 요청 함수 자동 선택
+local requestFunc = (syn and syn.request) or (http and http.request) or http_request or request
+
+if requestFunc then
+    local response = requestFunc({
+        Url = apiUrl,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json"
+        },
+        Body = jsonData
+    })
+    print("전송 완료 상태 코드:", response.StatusCode)
+else
+    warn("HTTP 요청을 지원하지 않는 환경입니다.")
+end
